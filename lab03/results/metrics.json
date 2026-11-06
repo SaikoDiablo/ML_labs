@@ -1,0 +1,38 @@
+{
+    "MLP": {
+        "params": 235146,
+        "trainable_params": 235146,
+        "macs": 234752.0,
+        "estimated_flops_2_per_mac": 469504.0,
+        "thop_params": 235146,
+        "profile_ok": true,
+        "lat_1_ms": 0.08700002217665315,
+        "lat_128_ms": 0.6435999821405858,
+        "acc": 87.34,
+        "test_loss": 0.34658815071582794
+    },
+    "CNN": {
+        "params": 20490,
+        "trainable_params": 20490,
+        "macs": 1031744.0,
+        "estimated_flops_2_per_mac": 2063488.0,
+        "thop_params": 20490,
+        "profile_ok": true,
+        "lat_1_ms": 0.2752500004135072,
+        "lat_128_ms": 25.651299976743758,
+        "acc": 89.52,
+        "test_loss": 0.29584471964836123
+    },
+    "Attention": {
+        "params": 70794,
+        "trainable_params": 70794,
+        "macs": 591488.0,
+        "estimated_flops_2_per_mac": 1182976.0,
+        "thop_params": 37514,
+        "profile_ok": true,
+        "lat_1_ms": 0.658450007904321,
+        "lat_128_ms": 11.56700000865385,
+        "acc": 84.02,
+        "test_loss": 0.4521899540901184
+    }
+}
