@@ -1,4 +1,4 @@
-# Individual Project Proposal (Lab 6, Task 8)
+# Individual Project Proposal 
 
 **Student name:** Viktoryia Tsitarenka
 **Student ID:** 73500 
