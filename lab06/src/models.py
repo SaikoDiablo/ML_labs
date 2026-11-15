@@ -52,7 +52,7 @@ class AttentionModel(nn.Module):
         self.classifier = nn.Linear(64, 10)
 
     def forward(self, x):
-        # (B,1,28,28) -> 16 patches of 7x7 = 49
+        # 16 patches of 7x7 = 49
         x = x.unfold(2, 7, 7).unfold(3, 7, 7)
         x = x.reshape(x.size(0), 16, 49)
         x = self.patch_projection(x)
