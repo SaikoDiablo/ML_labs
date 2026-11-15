@@ -1,4 +1,3 @@
-"""Print Python and key package versions for Lab 6 (global reproducibility requirement)."""
 import platform
 import sys
 
