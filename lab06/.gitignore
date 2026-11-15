@@ -1,0 +1,22 @@
+# Data (downloaded automatically by torchvision)
+data/
+
+# Generated outputs / large artifacts
+results/
+mlruns/
+*.pth
+*.pt
+*.ckpt
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+
+mlflow.db
