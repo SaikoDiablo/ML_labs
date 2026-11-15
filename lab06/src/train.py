@@ -260,7 +260,6 @@ if __name__ == "__main__":
     parser.add_argument("--config", default="config.yaml", help="Path to YAML config")
     args = parser.parse_args()
     cfg = load_config(args.config)
-    # make relative paths resolve relative to config file location
     base = Path(args.config).resolve().parent
     for k in ("root",):
         cfg["data"][k] = str((base / cfg["data"][k]).resolve())
