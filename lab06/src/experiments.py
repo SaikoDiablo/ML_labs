@@ -28,7 +28,7 @@ def ensure_paths(cfg, base: Path):
 
 
 def profile_one_epoch(cfg, device):
-    """Task 2: profile one epoch and report share of time."""
+    """Task 2"""
     set_seed(cfg["seed"])
     train_loader, _, _ = get_dataloaders(cfg, device)
     model = build_model(cfg["model"]["name"]).to(device)
@@ -40,7 +40,7 @@ def profile_one_epoch(cfg, device):
         activities.append(ProfilerActivity.CUDA)
 
     model.train()
-    # profile a limited number of steps for speed but representative
+    # limited number of steps for speed 
     steps_to_profile = min(50, len(train_loader))
 
     with profile(
@@ -63,7 +63,6 @@ def profile_one_epoch(cfg, device):
     table = prof.key_averages().table(sort_by="cpu_time_total", row_limit=30)
     print(table)
 
-    # Aggregate shares by coarse categories using operator names
     totals = {"data_loading": 0.0, "forward": 0.0, "backward": 0.0, "optimizer": 0.0, "other": 0.0}
     total_cpu = 0.0
     for evt in prof.key_averages():
@@ -81,7 +80,7 @@ def profile_one_epoch(cfg, device):
         else:
             totals["other"] += t
 
-    # heuristic fallback: if categories too small, report from wall-clock buckets
+    # heuristic fallback
     if total_cpu == 0:
         total_cpu = 1.0
     shares = {k: 100.0 * v / total_cpu for k, v in totals.items()}
@@ -101,13 +100,13 @@ def profile_one_epoch(cfg, device):
 
 
 def study_workers(cfg, device):
-    """Task 3: vary num_workers and plot."""
+    """Task 3"""
     values = [0, 1, 2, 4, 8]
     results = []
     for nw in values:
         c = copy.deepcopy(cfg)
         c["data"]["num_workers"] = nw
-        c["training"]["epochs"] = min(1, c["training"]["epochs"])  # 1 epoch for throughput timing
+        c["training"]["epochs"] = min(1, c["training"]["epochs"])  
         c["run_name"] = f"workers_{nw}"
         set_seed(c["seed"])
         train_loader, _, _ = get_dataloaders(c, device)
@@ -115,7 +114,7 @@ def study_workers(cfg, device):
         criterion = nn.CrossEntropyLoss()
         optimizer = build_optimizer(model, c)
 
-        # measure one epoch wall time and samples/s
+        # measure one epoch 
         model.train()
         n_samples = 0
         if device.type == "cuda":
@@ -157,7 +156,7 @@ def study_workers(cfg, device):
 
 
 def study_batch_size(cfg, device):
-    """Task 4: batch-size study."""
+    """Task 4"""
     batch_sizes = [32, 64, 128, 256, 512]
     results = []
     for bs in batch_sizes:
@@ -176,7 +175,7 @@ def study_batch_size(cfg, device):
             criterion = nn.CrossEntropyLoss()
             optimizer = build_optimizer(model, c)
 
-            # throughput over first epoch
+            # throughput 
             model.train()
             n_samples = 0
             if device.type == "cuda":
@@ -194,7 +193,7 @@ def study_batch_size(cfg, device):
                 torch.cuda.synchronize()
             throughput = n_samples / (time.perf_counter() - t0)
 
-            # full 5-epoch training for final accuracy
+            # 5-epoch training 
             metrics = train(c, device=device)
             peak_mem = torch.cuda.max_memory_allocated() / (1024 ** 2) if device.type == "cuda" else None
             results.append({
@@ -223,7 +222,7 @@ def study_batch_size(cfg, device):
 
 
 def study_schedules(cfg, device):
-    """Task 5: compare LR schedules and optimizers under 10 epochs."""
+    """Task 5"""
     configs = []
     # LR schedules with Adam
     for sched in ["step", "cosine", "plateau"]:
@@ -234,7 +233,7 @@ def study_schedules(cfg, device):
         c["run_name"] = f"adam_{sched}"
         c["output"]["results_dir"] = str(Path(cfg["output"]["results_dir"]) / f"sched_adam_{sched}")
         configs.append((f"Adam+{sched}", c))
-    # Optimizers with same (none/step) schedule for fair 10-epoch budget comparison
+    # Optimizers
     for opt in ["sgd_momentum", "adam"]:
         c = copy.deepcopy(cfg)
         c["training"]["epochs"] = 10
@@ -259,7 +258,7 @@ def study_schedules(cfg, device):
 
 
 def study_accumulation(cfg, device):
-    """Task 6: gradient accumulation equivalence (batch 64, accum 4 ~= batch 256)."""
+    """Task 6"""
     out = Path(cfg["output"]["results_dir"])
     out.mkdir(parents=True, exist_ok=True)
 
